@@ -3,38 +3,54 @@
 pin::pin(void)
 {
 	_pin    = 0;
-	_pinDir = INPUT;
-	_mask = 0x00;
+	_dir    = INPUT;
+	_mask   = 0x00;
+  _port   = NOT_A_PORT;
 }
 
 pin::pin(byte p)
 {
-	_pinDir = INPUT;
+	_dir  = INPUT;
 	_mask = 0x00;
+  _port = NOT_A_PORT;
 	this->setup(p,INPUT);
 }
 
 pin::pin(byte p, byte dir)
 {
 	_mask = 0x00;
+  _port = NOT_A_PORT;
 	this->setup(p , dir);
 }
 
+
+void pin::setPin(byte p)
+{
+	_pin = p;
+	this->setup(_pin, _dir);
+}
+
+void pin::setDir(byte dir)
+{
+	_dir = dir;
+	this->setup(_pin,_dir);
+}
+
+#if defined(__AVR_ATmega644P__) || defined(__AVR_ATmega644__) || defined(__AVR_ATmega1284P__) || defined(__AVR_ATmega1284__)
+
 void pin::setup(byte p, byte dir)
 {
-
 	if( p > _P_MAX)
 		return;
 
-
-	_pinDir = dir;
+  _dir = dir;
 	_pin = p;
 	_mask = 0x00;
 
 	if(_PA(_pin))
 	{
 		_mask = _PA_MASK(_pin);
-		if(_pinDir == OUTPUT)
+		if(_dir == OUTPUT)
 			DDRA |= _mask;
 		else
 			DDRA &= ~_mask;
@@ -45,7 +61,7 @@ void pin::setup(byte p, byte dir)
 	else if(_PB(_pin))
 	{
 		_mask = _PB_MASK(_pin);
-		if(_pinDir == OUTPUT)
+		if(_dir == OUTPUT)
 			DDRB |= _mask;
 		else
 			DDRB &= ~_mask;
@@ -56,7 +72,7 @@ void pin::setup(byte p, byte dir)
 	else if(_PC(_pin))
 	{
 		_mask = _PC_MASK(_pin);
-		if(_pinDir == OUTPUT)
+		if(_dir == OUTPUT)
 			DDRC |= _mask;
 		else
 			DDRC &= ~_mask;
@@ -66,7 +82,7 @@ void pin::setup(byte p, byte dir)
 	else if(_PD(_pin))
 	{
 		_mask = _PD_MASK(_pin);
-		if(_pinDir == OUTPUT)
+		if(_dir == OUTPUT)
 			DDRD |= _mask;
 		else
 			DDRD &= ~_mask;
@@ -146,7 +162,7 @@ void pin::clear(void)
 
 void pin::set(byte state)
 {
-	if (_pinDir == INPUT)
+	if (_dir == INPUT)
 		return;
 
 	if(state == HIGH)
@@ -187,24 +203,63 @@ byte pin::get(void)
 	return(0);
 }
 
-void pin::setDir(byte dir)
-{
-	_pinDir = dir;
-	this->setup(_pin,_pinDir);
-}
+#elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 
-byte pin::getDir(void)
+void pin::setup(byte p, byte dir)
 {
-	return(_pinDir);
-}
+  _port = NOT_A_PORT;
+	if( p > _P_MAX)
+		return;
 
-void pin::setPin(byte p)
-{
+	_dir = dir;
 	_pin = p;
-	this->setup(_pin, _pinDir);
+
+  _mask = pgm_read_byte(digital_pin_to_bit_mask_PGM+p);
+  _port = pgm_read_byte(digital_pin_to_port_PGM+p);
+  _pDDRx  = (byte*)pgm_read_word(port_to_mode_PGM+_port);
+  _pPORTx = (byte*)pgm_read_word(port_to_output_PGM+_port);
+  _pPINx  = (byte*)pgm_read_word(port_to_input_PGM+_port);
+  
+	if(_dir == OUTPUT)
+		*_pDDRx |= _mask;
+	else
+		*_pDDRx &= ~_mask;
 }
 
-byte pin::getPin(void)
+void pin::set(void)
 {
-	return(_pin);
+  //.byte btVal = *_pPORTx;
+  //btVal |= _mask;
+  //*_pPORTx = btVal;
+  *_pPORTx |= _mask;
 }
+
+void pin::clear(void)
+{
+  //.byte btVal = *_pPORTx;
+  //btVal &= ~_mask;
+  //*_pPORTx = btVal;
+  *_pPORTx &= ~_mask;
+}
+
+void pin::set(byte state)
+{
+	if (_dir == INPUT)
+		return;
+
+	if(state == HIGH)
+		set();
+	else
+		clear();
+}
+
+
+byte pin::get(void)
+{
+  if (_port == 0) 
+    return 0;
+
+  return ((*_pPINx & _mask) ? 0xFF : 0x00);
+}
+
+#endif
