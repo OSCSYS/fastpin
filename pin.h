@@ -1,10 +1,60 @@
+/***********************************************************
+
+  FastPin Library
+
+  Copyright (C) 2009-2011 Matt Reba, Jermeiah Dillingham
+
+    This file is part of BrewTroller.
+
+    BrewTroller is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    BrewTroller is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with BrewTroller.  If not, see <http://www.gnu.org/licenses/>.
+
+    Documentation, Forums and more information available at http://www.brewtroller.com
+
+    Original Author:
+    Modified By:      Tom Harkaway, Feb, 2011
+
+    Modifications:
+
+      Generalize FastPin library so that it can be used on Arduino platforms, specifically
+      the Arduino Mega.
+
+      Incorporate PinChange interrupt (PCInt) support. On the BrewTroller, all 32 pins can
+      be configured as PCInt pins. That is not true of other Arduino platforms, such as 
+      the Adrunio Mega.
+*/
+
 #ifndef _PIN_H
 #define _PIN_H
+
+// Uncomment to add access to debug routines to Serial debug dump routines
+//#define FASTPIN_DEBUG
 
 #include <pins_arduino.h>
 #include <avr/io.h>
 #include <WProgram.h>
 
+#if defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)   // Sanguino
+#define MAX_PIN 31
+#elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)  // Arduino ATMega
+#define MAX_PIN 69
+#else
+#error FastPin only defined for ATMega (1280/2560) and Sanguino (644P/1284P) processors
+#endif
+
+// Port IDs
+//
+#define NOT_A_PORT 0
 #define PA 1
 #define PB 2
 #define PC 3
@@ -14,63 +64,109 @@
 #define PG 7
 #define PH 8
 #define PJ 10
-#define PL 11
+#define PK 11
+#define PL 12
+
+#define NO_PCINT 255
 
 
-//Define the Digital pin arrangements and masks for each port on the Arduino or Sanguino
-#if defined(__AVR_ATmega644P__) || defined(__AVR_ATmega644__) || defined(__AVR_ATmega1284P__) || defined(__AVR_ATmega1284__)
-//If on the Sanguino platform maximum number of digital IO pins available
-#define _P_MAX		31
+typedef void (*PCIntvoidFuncPtr)(void);
 
-#define _PA_FIRST   24
-#define _PA_LAST	31
-#define _PA_MASK(n) (0x80 >> ((n) & 0x07))
-#define _PA(n)		((n) > (_PA_FIRST-1)) && ((n) < (_PA_FIRST + 8))
 
-#define _PB_FIRST   0
-#define _PB_LAST	7
-#define _PB_MASK(n) (0x01 << ((n) & 0x07))
-#define _PB(n)		((n) > (_PB_FIRST-1)) && ((n) < (_PB_FIRST + 8))
+/********************************************************/
+// PinChange Interrupt Support Classes
+//
 
-#define _PC_FIRST   16
-#define _PC_LAST	23
-#define _PC_MASK(n) (0x01 << ((n) & 0x07))
-#define _PC(n)		((n) > (_PC_FIRST-1)) && ((n) < (_PC_FIRST + 8))
+// Uncomment the line below to limit the Pin Change handler to servicing a single interrupt
+//#define	DISABLE_PCINT_MULTI_SERVICE
 
-#define _PD_FIRST   8
-#define _PD_LAST	15
-#define _PD_MASK(n) (0x01 << ((n) & 0x07))
-#define _PD(n)		((n) > (_PD_FIRST-1)) && ((n) < (_PD_FIRST + 8))
+// Define the value MAX_PIN_CHANGE_PINS to limit the number of pins that may be configured for PCINT
+//
+#define	MAX_PIN_CHANGE_PINS 8
 
-#elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+// Declare PCINT ports without pin change interrupts used
+//
+//#define	NO_PCINT0_PINCHANGES 1
+//#define	NO_PCINT1_PINCHANGES 1
+//#define	NO_PBINC2_PINCHANGES 1
+//#define	NO_PCINT3_PINCHANGES 1
 
-#define _P_MAX		69
 
-#else
+// PCI_Port class 
+//  Manages the collection PinChangeInterrupts (PCI) for a given port. 
+//
+class PCI_Port 
+{
+  // constructor
+  PCI_Port(int index, int port, volatile uint8_t& maskReg) :
+      _index(index),
+      _inputReg(*portInputRegister(port)),
+      _pcmskReg(maskReg),
+      _pcicrBit(1 << index),
+      _lastVal(0)	
+  {
+    for (int i = 0; i < 9; i++) 
+      _pcIntPinArray[i] = NULL;
+  }
 
-//else if the Arduino platform
-#define _P_MAX		15
+public:
+  static PCI_Port	s_pcIntPorts[]; // static PCI_Port Array
 
-#define _PA_FIRST   0
-#define _PA_LAST	0
-#define _PA_MASK(n) 0
-#define _PA(n)		0
+  void PCintHandler();              // PinChange Interrupt Handler
+  void PCintHandler2();              // PinChange Interrupt Handler
 
-#define _PB_FIRST   8
-#define _PB_LAST	15
-#define _PB_MASK(n) (0x01 << ((n) & 0x07))
-#define _PB(n)		(((n) > (_PB_FIRST-1)) && ((n) < (_PB_FIRST+8))
+protected:
 
-#define _PC_FIRST   0
-#define _PC_LAST	0
-#define _PC_MASK(n) 0
-#define _PC(n)		0
+  // embedded PCI_Pin class
+  //
+  class PCI_Pin 
+  {
+  public:
+    PCI_Pin() :
+        _pinID(0),
+        _pinMask(0),
+        _pinMode(0),
+        _func((PCIntvoidFuncPtr)NULL)
+  { }
 
-#define _PD_FIRST   0
-#define _PD_LAST	7
-#define _PD_MASK(n) (0x01 << ((n) & 0x07))
-#define _PD(n)		(((n) > (_PD_FIRST-1)) && ((n) < (_PD_LAST+8))
+    byte _pinID;    // pin number
+    byte _pinMask;  // bit mask 
+    byte _pinMode;  // CHANGE, RISING, FALLING
+
+    PCIntvoidFuncPtr _func; // user function 
+
+    // static PCintPins Array
+    static PCI_Pin s_pcIntPins[MAX_PIN_CHANGE_PINS];
+
+  }; // PCI_Pin class
+
+public:
+  int  addPin(byte pin, byte mode, byte mask, PCIntvoidFuncPtr userFunc);
+  bool delPin(byte pinID);
+
+protected:
+  byte              _index;
+  volatile byte&		_inputReg;  // port input register (will need to move to PCI_Pin)
+  volatile byte&		_pcmskReg;  // port bit Mask Register
+  const byte			  _pcicrBit;  // PCI enable bit
+  byte			        _lastVal;   // last input value
+
+  //// PCI_Pin array for this port
+  PCI_Pin*	_pcIntPinArray[9];	// extra entry is a barrier
+
+public:
+#ifdef FASTPIN_DEBUG
+  int getIndex() { return _index; }
+  void dumpPCIntPin(PCI_Pin* pPin);
+  void dumpPCIntPinArray();
 #endif
+
+};  // PCI_Port class
+
+
+/********************************************************/
+// Fast Access I/O Pin Class
+//
 
 
 class pin
@@ -78,36 +174,38 @@ class pin
 public:
 	pin(void);
 	pin(byte);
-	pin(byte, byte);
-	void setup(byte p, byte dir);
+	pin(byte pinID, byte pinDir);
+	void setup(byte pin, byte pinDir);
+
+  void setPin(byte);
+  void setDir(byte);
 
 	void set(byte);
 	void set(void);
 	void clear(void);
-
-	byte get(void);
+	bool get(void);
 	
-	void setPin(byte);
-	void setDir(byte);
-  
-  byte getPin(void) { return _pin; }
-  byte getDir(void) { return _dir; }
-  byte getPort(void) { return _port; }
-  byte getMask(void) { return _mask; }
-  
-  uint16_t getDDRx(void) { return (uint16_t)_pDDRx; }
-  uint16_t getPORTx(void) { return (uint16_t)_pPORTx; }
-  uint16_t getPINx(void) { return (uint16_t)_pPINx; }
+  byte getPin(void)   { return _pinID; }
+  byte getDir(void)   { return _dir; }
+  byte getPort(void)  { return _port; }
+  byte getMask(void)  { return _mask; }
+
+  int  attachPCInt(int modePC, PCIntvoidFuncPtr userFunc);
+  bool detachPCInt();
 
 private:
-	byte _pin;
-	byte _dir;
-	byte _port;
-	byte _mask;
-  
-  volatile uint8_t* _pDDRx;
-  volatile uint8_t* _pPORTx;
-  volatile uint8_t* _pPINx;
+	byte _pinID;  // pin number
+	byte _dir;    // direction
+	byte _port;   // port ID
+	byte _mask;   // mask
+
 };
+
+
+// Mapping of PIN ID to PCInt port
+//
+extern const uint8_t PROGMEM digitalpin_to_pcint_PGM[];
+#define digitalPinToPCINT(P) ( pgm_read_byte( digitalpin_to_pcint_PGM + (P) ) )
+
 
 #endif
