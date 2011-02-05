@@ -42,6 +42,7 @@
 // ToDo: attachPCInt for pin that is already attached?
 // ToDo: detachPCInt for pin that is not attached?
 // ToDo: same pin assigned to two different pin objects?
+// ToDo: remove if else method of get after testing
 
 #include <pins_arduino.h>
 
@@ -223,6 +224,24 @@ void pin::set(byte state)
 }
 
 
+//bool pin::get(void)
+//{
+//  if (_port == PA)       return((PINA & _mask)?0xFF:0x0);
+//  else if (_port == PB)  return((PINB & _mask)?0xFF:0x0);
+//  else if (_port == PC)  return((PINC & _mask)?0xFF:0x0);
+//  else if (_port == PD)  return((PIND & _mask)?0xFF:0x0);  
+//#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+//  else if (_port == PE)  return((PINE & _mask)?0xFF:0x0);
+//  else if (_port == PF)  return((PINF & _mask)?0xFF:0x0);
+//  else if (_port == PG)  return((PING & _mask)?0xFF:0x0);
+//  else if (_port == PH)  return((PINH & _mask)?0xFF:0x0);  
+//  else if (_port == PJ)  return((PINJ & _mask)?0xFF:0x0);
+//  else if (_port == PK)  return((PINK & _mask)?0xFF:0x0);
+//  else if (_port == PL)  return((PINL & _mask)?0xFF:0x0);
+//#endif
+//  return 0;
+//}
+
 bool pin::get(void)
 {
 	switch(_port)
@@ -318,6 +337,7 @@ int PCI_Port::addPin(byte pinID, byte mode, byte mask, PCIntvoidFuncPtr userFunc
           pPin->_func     = userFunc;
           _pcIntPinArray[j]   = pPin;
           _pcmskReg |= mask;
+          PCICR |= _pcicrBit;
           return i;
         }
       }
