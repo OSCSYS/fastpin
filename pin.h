@@ -184,6 +184,7 @@ public:
 	void set(void);
 	void clear(void);
 	bool get(void);
+        void toggle(void);
 	
   byte getPin(void)   { return _pinID; }
   byte getDir(void)   { return _dir; }

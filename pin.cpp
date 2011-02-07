@@ -215,6 +215,26 @@ void pin::clear(void)
   }
 }
 
+void pin::toggle(void)
+{
+	switch(_port)
+	{
+  case PA:  PORTA ^= _mask; return;
+  case PB:  PORTB ^= _mask; return;
+  case PC:  PORTC ^= _mask; return;
+  case PD:  PORTD ^= _mask; return;
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+  case PE:  PORTE ^= _mask; return;
+  case PF:  PORTF ^= _mask; return;
+  case PG:  PORTG ^= _mask; return;
+  case PH:  PORTH ^= _mask; return;
+  case PJ:  PORTJ ^= _mask; return;
+  case PK:  PORTK ^= _mask; return;
+  case PL:  PORTL ^= _mask; return;
+#endif
+  }
+}
+
 void pin::set(byte state)
 {
 	if(state == HIGH) 
@@ -222,7 +242,6 @@ void pin::set(byte state)
 	else  
     clear();
 }
-
 
 //bool pin::get(void)
 //{
