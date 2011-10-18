@@ -179,7 +179,9 @@ void pin::set(void)
 {
 	switch(_port)
 	{
-  case PA:  PORTA |= _mask; return;
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
+	case PA:  PORTA |= _mask; return;
+#endif
   case PB:  PORTB |= _mask; return;
 	case PC:  PORTC |= _mask; return;
   case PD:  PORTD |= _mask; return;
@@ -199,7 +201,9 @@ void pin::clear(void)
 {
 	switch(_port)
 	{
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
   case PA:  PORTA &= ~_mask; return;
+#endif
   case PB:  PORTB &= ~_mask; return;
   case PC:  PORTC &= ~_mask; return;
 	case PD:  PORTD &= ~_mask; return;
@@ -219,7 +223,9 @@ void pin::toggle(void)
 {
 	switch(_port)
 	{
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
   case PA:  PORTA ^= _mask; return;
+#endif
   case PB:  PORTB ^= _mask; return;
   case PC:  PORTC ^= _mask; return;
   case PD:  PORTD ^= _mask; return;
@@ -265,9 +271,13 @@ bool pin::get(void)
 {
 	switch(_port)
 	{
+
+
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
   case PA:  return((PINA & _mask)?0xFF:0x0);
+#endif
   case PB:  return((PINB & _mask)?0xFF:0x0);
-	case PC:  return((PINC & _mask)?0xFF:0x0);
+  case PC:  return((PINC & _mask)?0xFF:0x0);
   case PD:  return((PIND & _mask)?0xFF:0x0);  
 #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
   case PE:  return((PINE & _mask)?0xFF:0x0);
