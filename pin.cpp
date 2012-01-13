@@ -580,6 +580,12 @@ const uint8_t PROGMEM digitalpin_to_pcint_PGM[] = {
   PCINT_BIT(0,3), // 11   PB3
   PCINT_BIT(0,4), // 12   PB4
   PCINT_BIT(0,5), // 13   PB5
+  PCINT_BIT(1,0), // 13   PC0
+  PCINT_BIT(1,1), // 13   PC1
+  PCINT_BIT(1,2), // 13   PC2
+  PCINT_BIT(1,3), // 13   PC3
+  PCINT_BIT(1,4), // 13   PC4
+  PCINT_BIT(1,5), // 13   PC5
 };
 
 #elif defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
