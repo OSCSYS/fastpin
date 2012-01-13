@@ -563,7 +563,26 @@ ISR(PCINT3_vect)
 
 #define PCINT_BIT(_pcint_,_bit_) ((_pcint_<<4)+_bit_)
 
-#if defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
+#if defined(__AVR_ATmega168__)
+
+const uint8_t PROGMEM digitalpin_to_pcint_PGM[] = {
+  PCINT_BIT(2,0), // 0    PD0
+  PCINT_BIT(2,1), // 1    PD1
+  PCINT_BIT(2,2), // 2    PD2
+  PCINT_BIT(2,3), // 3    PD3
+  PCINT_BIT(2,4), // 4    PD4
+  PCINT_BIT(2,5), // 5    PD5
+  PCINT_BIT(2,6), // 6    PD6
+  PCINT_BIT(2,7), // 7    PD7
+  PCINT_BIT(0,0), // 8    PB0
+  PCINT_BIT(0,1), // 9    PB1
+  PCINT_BIT(0,2), // 10   PB2
+  PCINT_BIT(0,3), // 11   PB3
+  PCINT_BIT(0,4), // 12   PB4
+  PCINT_BIT(0,5), // 13   PB5
+};
+
+#elif defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
 
 const uint8_t PROGMEM digitalpin_to_pcint_PGM[] = {
   PCINT_BIT(1,0), // 0    PB0
@@ -676,7 +695,6 @@ const uint8_t PROGMEM digitalpin_to_pcint_PGM[] = {
   PCINT_BIT(2,7), // 69   PK7
 
 };
-
 #endif
 
 
