@@ -566,139 +566,139 @@ ISR(PCINT3_vect)
 #if defined(__AVR_ATmega168__)
 
 const uint8_t PROGMEM digitalpin_to_pcint_PGM[] = {
-  PCINT_BIT(2,0), // 0    PD0
-  PCINT_BIT(2,1), // 1    PD1
-  PCINT_BIT(2,2), // 2    PD2
-  PCINT_BIT(2,3), // 3    PD3
-  PCINT_BIT(2,4), // 4    PD4
-  PCINT_BIT(2,5), // 5    PD5
-  PCINT_BIT(2,6), // 6    PD6
-  PCINT_BIT(2,7), // 7    PD7
-  PCINT_BIT(0,0), // 8    PB0
-  PCINT_BIT(0,1), // 9    PB1
-  PCINT_BIT(0,2), // 10   PB2
-  PCINT_BIT(0,3), // 11   PB3
-  PCINT_BIT(0,4), // 12   PB4
-  PCINT_BIT(0,5), // 13   PB5
-  PCINT_BIT(1,0), // 13   PC0
-  PCINT_BIT(1,1), // 13   PC1
-  PCINT_BIT(1,2), // 13   PC2
-  PCINT_BIT(1,3), // 13   PC3
-  PCINT_BIT(1,4), // 13   PC4
-  PCINT_BIT(1,5), // 13   PC5
+  PCINT_BIT(2,0), // Pin-0    PD0
+  PCINT_BIT(2,1), // Pin-1    PD1
+  PCINT_BIT(2,2), // Pin-2    PD2
+  PCINT_BIT(2,3), // Pin-3    PD3
+  PCINT_BIT(2,4), // Pin-4    PD4
+  PCINT_BIT(2,5), // Pin-5    PD5
+  PCINT_BIT(2,6), // Pin-6    PD6
+  PCINT_BIT(2,7), // Pin-7    PD7
+  PCINT_BIT(0,0), // Pin-8    PB0
+  PCINT_BIT(0,1), // Pin-9    PB1
+  PCINT_BIT(0,2), // Pin-10   PB2
+  PCINT_BIT(0,3), // Pin-11   PB3
+  PCINT_BIT(0,4), // Pin-12   PB4
+  PCINT_BIT(0,5), // Pin-13   PB5
+  PCINT_BIT(1,0), // Pin-14   PC0
+  PCINT_BIT(1,1), // Pin-15   PC1
+  PCINT_BIT(1,2), // Pin-16   PC2
+  PCINT_BIT(1,3), // Pin-17   PC3
+  PCINT_BIT(1,4), // Pin-18   PC4
+  PCINT_BIT(1,5), // Pin-19   PC5
 };
 
 #elif defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)
 
 const uint8_t PROGMEM digitalpin_to_pcint_PGM[] = {
-  PCINT_BIT(1,0), // 0    PB0
-  PCINT_BIT(1,1), // 1    PB1
-  PCINT_BIT(1,2), // 2    PB2
-  PCINT_BIT(1,3), // 3    PB3
-  PCINT_BIT(1,4), // 4    PB4
-  PCINT_BIT(1,5), // 5    PB5
-  PCINT_BIT(1,6), // 6    PB6
-  PCINT_BIT(1,7), // 7    PB7
-  PCINT_BIT(3,0), // 8    PD0
-  PCINT_BIT(3,1), // 9    PD1
-  PCINT_BIT(3,2), // 10   PD2
-  PCINT_BIT(3,3), // 11   PD3
-  PCINT_BIT(3,4), // 12   PD4
-  PCINT_BIT(3,5), // 13   PD5
-  PCINT_BIT(3,6), // 14   PD6
-  PCINT_BIT(3,7), // 15   PD7
-  PCINT_BIT(2,0), // 16   PC0
-  PCINT_BIT(2,1), // 17   PC1
-  PCINT_BIT(2,2), // 18   PC2
-  PCINT_BIT(2,3), // 19   PC3
-  PCINT_BIT(2,4), // 20   PC4
-  PCINT_BIT(2,5), // 21   PC5
-  PCINT_BIT(2,6), // 22   PC6
-  PCINT_BIT(2,7), // 23   PC7
-  PCINT_BIT(0,7), // 24   PA7
-  PCINT_BIT(0,6), // 25   PA6
-  PCINT_BIT(0,5), // 26   PA5
-  PCINT_BIT(0,4), // 27   PA4
-  PCINT_BIT(0,3), // 28   PA3
-  PCINT_BIT(0,2), // 29   PA2
-  PCINT_BIT(0,1), // 30   PA1
-  PCINT_BIT(0,0), // 31   PA0
+  PCINT_BIT(1,0), // Pin-0    PB0
+  PCINT_BIT(1,1), // Pin-1    PB1
+  PCINT_BIT(1,2), // Pin-2    PB2
+  PCINT_BIT(1,3), // Pin-3    PB3
+  PCINT_BIT(1,4), // Pin-4    PB4
+  PCINT_BIT(1,5), // Pin-5    PB5
+  PCINT_BIT(1,6), // Pin-6    PB6
+  PCINT_BIT(1,7), // Pin-7    PB7
+  PCINT_BIT(3,0), // Pin-8    PD0
+  PCINT_BIT(3,1), // Pin-9    PD1
+  PCINT_BIT(3,2), // Pin-10   PD2
+  PCINT_BIT(3,3), // Pin-11   PD3
+  PCINT_BIT(3,4), // Pin-12   PD4
+  PCINT_BIT(3,5), // Pin-13   PD5
+  PCINT_BIT(3,6), // Pin-14   PD6
+  PCINT_BIT(3,7), // Pin-15   PD7
+  PCINT_BIT(2,0), // Pin-16   PC0
+  PCINT_BIT(2,1), // Pin-17   PC1
+  PCINT_BIT(2,2), // Pin-18   PC2
+  PCINT_BIT(2,3), // Pin-19   PC3
+  PCINT_BIT(2,4), // Pin-20   PC4
+  PCINT_BIT(2,5), // Pin-21   PC5
+  PCINT_BIT(2,6), // Pin-22   PC6
+  PCINT_BIT(2,7), // Pin-23   PC7
+  PCINT_BIT(0,7), // Pin-24   PA7
+  PCINT_BIT(0,6), // Pin-25   PA6
+  PCINT_BIT(0,5), // Pin-26   PA5
+  PCINT_BIT(0,4), // Pin-27   PA4
+  PCINT_BIT(0,3), // Pin-28   PA3
+  PCINT_BIT(0,2), // Pin-29   PA2
+  PCINT_BIT(0,1), // Pin-30   PA1
+  PCINT_BIT(0,0), // Pin-31   PA0
 };
 
 
 #elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 
 const uint8_t PROGMEM digitalpin_to_pcint_PGM[] = {
-  NO_PCINT,       // 0    //PCINT_BIT(1,0), // 0   PE0
-  NO_PCINT,       // 1
-  NO_PCINT,       // 2
-  NO_PCINT,       // 3
-  NO_PCINT,       // 4
-  NO_PCINT,       // 5
-  NO_PCINT,       // 6
-  NO_PCINT,       // 7
-  NO_PCINT,       // 8
-  NO_PCINT,       // 9
-  PCINT_BIT(0,4), // 10   PB4
-  PCINT_BIT(0,5), // 11   PB5
-  PCINT_BIT(0,6), // 12   PB6
-  PCINT_BIT(0,7), // 13   PB7
-  NO_PCINT,       // 14   PCINT_BIT(1,2), // 14   PJ1
-  NO_PCINT,       // 15   PCINT_BIT(1,1), // 15   PJ0
-  NO_PCINT,       // 16
-  NO_PCINT,       // 17
-  NO_PCINT,       // 18
-  NO_PCINT,       // 19
-  NO_PCINT,       // 20
-  NO_PCINT,       // 21
-  NO_PCINT,       // 22
-  NO_PCINT,       // 23
-  NO_PCINT,       // 24
-  NO_PCINT,       // 25
-  NO_PCINT,       // 26
-  NO_PCINT,       // 27
-  NO_PCINT,       // 28
-  NO_PCINT,       // 29
-  NO_PCINT,       // 30
-  NO_PCINT,       // 31
-  NO_PCINT,       // 32
-  NO_PCINT,       // 33
-  NO_PCINT,       // 34
-  NO_PCINT,       // 35
-  NO_PCINT,       // 36
-  NO_PCINT,       // 37
-  NO_PCINT,       // 38
-  NO_PCINT,       // 39
-  NO_PCINT,       // 40
-  NO_PCINT,       // 41
-  NO_PCINT,       // 42
-  NO_PCINT,       // 43
-  NO_PCINT,       // 44
-  NO_PCINT,       // 45
-  NO_PCINT,       // 46
-  NO_PCINT,       // 47
-  NO_PCINT,       // 48
-  NO_PCINT,       // 49
-  PCINT_BIT(0,3), // 50   PB3
-  PCINT_BIT(0,2), // 51   PB2
-  PCINT_BIT(0,1), // 52   PB1
-  PCINT_BIT(0,0), // 53   PB0
-  NO_PCINT,       // 55
-  NO_PCINT,       // 56
-  NO_PCINT,       // 57
-  NO_PCINT,       // 58
-  NO_PCINT,       // 59
-  NO_PCINT,       // 50
-  NO_PCINT,       // 60
-  NO_PCINT,       // 61
-  PCINT_BIT(2,0), // 62   PK0
-  PCINT_BIT(2,1), // 63   PK1
-  PCINT_BIT(2,2), // 64   PK2
-  PCINT_BIT(2,3), // 65   PK3
-  PCINT_BIT(2,4), // 66   PK4
-  PCINT_BIT(2,5), // 67   PK5
-  PCINT_BIT(2,6), // 68   PK6
-  PCINT_BIT(2,7), // 69   PK7
+  NO_PCINT,       // Pin-0    //PCINT_BIT(1,0), // Pin-0   PE0
+  NO_PCINT,       // Pin-1
+  NO_PCINT,       // Pin-2
+  NO_PCINT,       // Pin-3
+  NO_PCINT,       // Pin-4
+  NO_PCINT,       // Pin-5
+  NO_PCINT,       // Pin-6
+  NO_PCINT,       // Pin-7
+  NO_PCINT,       // Pin-8
+  NO_PCINT,       // Pin-9
+  PCINT_BIT(0,4), // Pin-10   PB4
+  PCINT_BIT(0,5), // Pin-11   PB5
+  PCINT_BIT(0,6), // Pin-12   PB6
+  PCINT_BIT(0,7), // Pin-13   PB7
+  NO_PCINT,       // Pin-14   PCINT_BIT(1,2), // Pin-14   PJ1
+  NO_PCINT,       // Pin-15   PCINT_BIT(1,1), // Pin-15   PJ0
+  NO_PCINT,       // Pin-16
+  NO_PCINT,       // Pin-17
+  NO_PCINT,       // Pin-18
+  NO_PCINT,       // Pin-19
+  NO_PCINT,       // Pin-20
+  NO_PCINT,       // Pin-21
+  NO_PCINT,       // Pin-22
+  NO_PCINT,       // Pin-23
+  NO_PCINT,       // Pin-24
+  NO_PCINT,       // Pin-25
+  NO_PCINT,       // Pin-26
+  NO_PCINT,       // Pin-27
+  NO_PCINT,       // Pin-28
+  NO_PCINT,       // Pin-29
+  NO_PCINT,       // Pin-30
+  NO_PCINT,       // Pin-31
+  NO_PCINT,       // Pin-32
+  NO_PCINT,       // Pin-33
+  NO_PCINT,       // Pin-34
+  NO_PCINT,       // Pin-35
+  NO_PCINT,       // Pin-36
+  NO_PCINT,       // Pin-37
+  NO_PCINT,       // Pin-38
+  NO_PCINT,       // Pin-39
+  NO_PCINT,       // Pin-40
+  NO_PCINT,       // Pin-41
+  NO_PCINT,       // Pin-42
+  NO_PCINT,       // Pin-43
+  NO_PCINT,       // Pin-44
+  NO_PCINT,       // Pin-45
+  NO_PCINT,       // Pin-46
+  NO_PCINT,       // Pin-47
+  NO_PCINT,       // Pin-48
+  NO_PCINT,       // Pin-49
+  PCINT_BIT(0,3), // Pin-50   PB3
+  PCINT_BIT(0,2), // Pin-51   PB2
+  PCINT_BIT(0,1), // Pin-52   PB1
+  PCINT_BIT(0,0), // Pin-53   PB0
+  NO_PCINT,       // Pin-55
+  NO_PCINT,       // Pin-56
+  NO_PCINT,       // Pin-57
+  NO_PCINT,       // Pin-58
+  NO_PCINT,       // Pin-59
+  NO_PCINT,       // Pin-50
+  NO_PCINT,       // Pin-60
+  NO_PCINT,       // Pin-61
+  PCINT_BIT(2,0), // Pin-62   PK0
+  PCINT_BIT(2,1), // Pin-63   PK1
+  PCINT_BIT(2,2), // Pin-64   PK2
+  PCINT_BIT(2,3), // Pin-65   PK3
+  PCINT_BIT(2,4), // Pin-66   PK4
+  PCINT_BIT(2,5), // Pin-67   PK5
+  PCINT_BIT(2,6), // Pin-68   PK6
+  PCINT_BIT(2,7), // Pin-69   PK7
 
 };
 #endif
