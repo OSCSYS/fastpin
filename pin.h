@@ -48,7 +48,7 @@
 #define MAX_PIN 31
 #elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)  // Arduino ATMega
 #define MAX_PIN 69
-#elif defined(__AVR_ATmega168__) // Arduino ATMega
+#elif defined(__AVR_ATmega168__)  || defined(__AVR_ATmega168P__) // Arduino ATMega
 #define MAX_PIN 20
 #else
 #error FastPin only defined for ATMega (1280/2560) and Sanguino (644P/1284P) processors
