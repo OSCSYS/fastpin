@@ -563,7 +563,7 @@ ISR(PCINT3_vect)
 
 #define PCINT_BIT(_pcint_,_bit_) ((_pcint_<<4)+_bit_)
 
-#if defined(__AVR_ATmega168__)
+#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega168P__) 
 
 const uint8_t PROGMEM digitalpin_to_pcint_PGM[] = {
   PCINT_BIT(2,0), // Pin-0    PD0
