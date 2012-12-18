@@ -74,7 +74,7 @@ PCI_Port::PCI_Pin PCI_Port::PCI_Pin::s_pcIntPins[MAX_PIN_CHANGE_PINS];
 // static PCI_Port array
 //
 PCI_Port PCI_Port::s_pcIntPorts[] = {
-#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega238__)
+#if defined(__AVR_ATmega168__) || defined(__AVR_ATmega238__) || defined(__AVR_ATmega168P__)
   PCI_Port(0, PB, PCMSK0),   // PB0-PB5 (Pins 8-13)
   PCI_Port(1, PC, PCMSK1),   // PC0-PC5 (Pins 14-19, AIN)
   PCI_Port(2, PD, PCMSK2)    // PD0-PD7 (Pins 0-7)
