@@ -42,7 +42,7 @@
 
 #include <pins_arduino.h>
 #include <avr/io.h>
-#include <WProgram.h>
+#include <Arduino.h>
 
 #if defined(__AVR_ATmega644P__) || defined(__AVR_ATmega1284P__)   // Sanguino
 #define MAX_PIN 31
@@ -131,9 +131,9 @@ protected:
         _func((PCIntvoidFuncPtr)NULL)
   { }
 
-    byte _pinID;    // pin number
-    byte _pinMask;  // bit mask 
-    byte _pinMode;  // CHANGE, RISING, FALLING
+    uint8_t _pinID;    // pin number
+    uint8_t _pinMask;  // bit mask 
+    uint8_t _pinMode;  // CHANGE, RISING, FALLING
 
     PCIntvoidFuncPtr _func; // user function 
 
@@ -143,11 +143,11 @@ protected:
   }; // PCI_Pin class
 
 public:
-  int  addPin(byte pin, byte mode, byte mask, PCIntvoidFuncPtr userFunc);
-  bool delPin(byte pinID);
+  int  addPin(uint8_t pin, uint8_t mode, uint8_t mask, PCIntvoidFuncPtr userFunc);
+  bool delPin(uint8_t pinID);
 
 protected:
-  byte              _index;
+  uint8_t              _index;
   volatile byte&		_inputReg;  // port input register (will need to move to PCI_Pin)
   volatile byte&		_pcmskReg;  // port bit Mask Register
   const byte			  _pcicrBit;  // PCI enable bit
@@ -176,8 +176,8 @@ class pin
 public:
 	pin(void);
 	pin(byte);
-	pin(byte pinID, byte pinDir);
-	void setup(byte pin, byte pinDir);
+	pin(uint8_t pinID, uint8_t pinDir);
+	void setup(uint8_t pin, uint8_t pinDir);
 
   void setPin(byte);
   void setDir(byte);
@@ -188,19 +188,19 @@ public:
 	bool get(void);
         void toggle(void);
 	
-  byte getPin(void)   { return _pinID; }
-  byte getDir(void)   { return _dir; }
-  byte getPort(void)  { return _port; }
-  byte getMask(void)  { return _mask; }
+  uint8_t getPin(void)   { return _pinID; }
+  uint8_t getDir(void)   { return _dir; }
+  uint8_t getPort(void)  { return _port; }
+  uint8_t getMask(void)  { return _mask; }
 
   int  attachPCInt(int modePC, PCIntvoidFuncPtr userFunc);
   bool detachPCInt();
 
 private:
-	byte _pinID;  // pin number
-	byte _dir;    // direction
-	byte _port;   // port ID
-	byte _mask;   // mask
+	uint8_t _pinID;  // pin number
+	uint8_t _dir;    // direction
+	uint8_t _port;   // port ID
+	uint8_t _mask;   // mask
 
 };
 

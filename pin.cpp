@@ -107,13 +107,13 @@ pin::pin(void)
   _port   = NOT_A_PORT;
 }
 
-pin::pin(byte pinID)
+pin::pin(uint8_t pinID)
 {
 	_dir  = INPUT;
 	setup(pinID, INPUT);
 }
 
-pin::pin(byte pinID, byte pinDir)
+pin::pin(uint8_t pinID, uint8_t pinDir)
 {
 	setup(pinID, pinDir);
 }
@@ -122,7 +122,7 @@ pin::pin(byte pinID, byte pinDir)
 // set/change configuration
 //
 
-void pin::setup(byte pinID, byte pinDir)
+void pin::setup(uint8_t pinID, uint8_t pinDir)
 {
   if( pinID > MAX_PIN)
   {
@@ -143,13 +143,13 @@ void pin::setup(byte pinID, byte pinDir)
     *pDDRx &= ~_mask;
 }
 
-void pin::setPin(byte pinID)
+void pin::setPin(uint8_t pinID)
 {
 	_pinID = pinID;
 	setup(_pinID, _dir);
 }
 
-void pin::setDir(byte pinDir)
+void pin::setDir(uint8_t pinDir)
 {
 	_dir = pinDir;
 	setup(_pinID, _dir);
@@ -241,7 +241,7 @@ void pin::toggle(void)
   }
 }
 
-void pin::set(byte state)
+void pin::set(uint8_t state)
 {
 	if(state == HIGH) 
     set();
@@ -314,12 +314,12 @@ int pin::attachPCInt(int mode, PCIntvoidFuncPtr userFunc)
     return -1;
 
   // get pcInt info (PCInt index & enable mask)
-  byte pcintInfo = digitalPinToPCINT(_pinID);
+  uint8_t pcintInfo = digitalPinToPCINT(_pinID);
   if (pcintInfo == NO_PCINT)
     return -2;
 
-  byte pcintIndex = pcintInfo >> 4;
-  byte pcintMask  = 1 << (pcintInfo & 0x0f);
+  uint8_t pcintIndex = pcintInfo >> 4;
+  uint8_t pcintMask  = 1 << (pcintInfo & 0x0f);
 
   // add pin
   PCI_Port& port = PCI_Port::s_pcIntPorts[pcintIndex];
@@ -334,11 +334,11 @@ int pin::attachPCInt(int mode, PCIntvoidFuncPtr userFunc)
 //
 bool pin::detachPCInt()
 {
-  byte pciInfo = digitalPinToPCINT(_pinID);
+  uint8_t pciInfo = digitalPinToPCINT(_pinID);
   if (pciInfo == NO_PCINT)
     return false;
 
-  byte pciPortIndex = pciInfo >> 4;
+  uint8_t pciPortIndex = pciInfo >> 4;
   PCI_Port& port = PCI_Port::s_pcIntPorts[pciPortIndex];
   return port.delPin(_pinID);
 }
@@ -346,9 +346,9 @@ bool pin::detachPCInt()
 
 // add (enable) PinChange pin to PinChange port
 //
-int PCI_Port::addPin(byte pinID, byte mode, byte mask, PCIntvoidFuncPtr userFunc)
+int PCI_Port::addPin(uint8_t pinID, uint8_t mode, uint8_t mask, PCIntvoidFuncPtr userFunc)
 {
-  byte i,j;
+  uint8_t i,j;
   PCI_Pin* pPin;
 
   for (i=0; i<MAX_PIN_CHANGE_PINS; i++)
@@ -380,10 +380,10 @@ int PCI_Port::addPin(byte pinID, byte mode, byte mask, PCIntvoidFuncPtr userFunc
 
 // delete (disable) PinChange pin from PinChange port
 //
-bool PCI_Port::delPin(byte pinID)
+bool PCI_Port::delPin(uint8_t pinID)
 {
   //dumpPCIntPinArray();
-  byte i;
+  uint8_t i;
   bool done = false;
   for (i=0; i<8; i++)
   {
@@ -394,7 +394,7 @@ bool PCI_Port::delPin(byte pinID)
 
     if (pPin->_pinID == pinID)
     {
-      byte oldSREG = SREG;
+      uint8_t oldSREG = SREG;
       cli();
 
       // disable the mask.
@@ -447,8 +447,8 @@ void PCI_Port::PCintHandler()
 
     // process first PCINT on this port (???)
 
-    byte actual  = _inputReg;          // get actual port val
-    byte changed = actual ^ _lastVal;  // xor with last to get changed
+    uint8_t actual  = _inputReg;          // get actual port val
+    uint8_t changed = actual ^ _lastVal;  // xor with last to get changed
 
     // get the pin states for the indicated port and mask pins that have changed. 
     //    screen out non pcint pins.
@@ -486,8 +486,8 @@ void PCI_Port::PCintHandler()
 #ifdef ARRAY_BASED_HANDLER
 void PCI_Port::PCintHandler()
 {
-  byte actual  = _inputReg;          // get actual port val
-  byte changed = actual ^ _lastVal;  // xor with last to get changed
+  uint8_t actual  = _inputReg;          // get actual port val
+  uint8_t changed = actual ^ _lastVal;  // xor with last to get changed
 
   // get the pin states for the indicated port and mask pins that have changed. 
   //    screen out non pcint pins.
@@ -496,7 +496,7 @@ void PCI_Port::PCintHandler()
 
   _lastVal = actual;
 
-    byte i;
+    uint8_t i;
     for (i=0; i<8; i++)
     {
       PCI_Pin* pPin = _pcIntPinArray[i];
@@ -725,7 +725,7 @@ void PCI_Port::dumpPCIntPin(PCI_Pin* pPin)
 void PCI_Port::dumpPCIntPinArray()
 {
   Serial.print("pcInt Array: ");
-  byte i;
+  uint8_t i;
   for (i=0; i<8; i++)
   {
     if (_pcIntPinArray[i] == NULL)
